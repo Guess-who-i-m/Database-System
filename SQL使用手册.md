@@ -167,5 +167,64 @@ COMMIT;     --提交事务
 
 下面两个SQL查询等价
 ```sql
-SELECT s
+SELECT ename
+FROM employee ,works_on, project
+WHERE employee.essn = works_on.essn AND works_on.pno = project.pno AND project.pname = 'SQL';
+```
+
+```sql
+SELECT ename
+FROM employee
+JOIN works_on ON employee.essn = works_on.essn
+JOIN project ON works_on.pno = project.pno
+WHERE project.pname = 'SQL';
+```
+使用连接查询和使用多表再在where里面做相等判断能有一样的效果。
+
+#### 聚类消除重复
+
+使用上面的方法得到的结果可能会有重复，可以是用GROUP BY来消除
+```sql
+SELECT ename
+FROM employee
+JOIN works_on ON employee.essn = works_on.essn
+JOIN project ON works_on.pno = project.pno
+WHERE project.pname = 'SQL'
+GROUP BY essn;
+```
+
+#### 聚集函数
+聚集函数可以放在两个地方：
+- SELECT后
+- HAVING后
+
+```sql
+SELECT department.dname, SUM(employee.salary) / SUM(works_on.hours)
+FROM employee, works_on, department
+WHERE employee.essn = works_on.essn AND employee.dno = department.dno
+GROUP BY department.dno;
+```
+
+```sql
+SELECT dname
+FROM department, employee
+WHERE department.dno = employee.dno
+GROUP BY employee.dno
+HAVING AVG(employee.salary) < 3000;
+```
+
+#### 嵌套查询
+
+```sql
+SELECT essn, ename
+FROM employee
+WHERE essn IN(
+    SELECT essn
+    FROM works_on
+    GROUP BY essn
+    HAVING COUNT(works_on.pno) = (
+        SELECT COUNT(*)
+        FROM project
+        )
+    );
 ```
