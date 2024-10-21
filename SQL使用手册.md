@@ -159,6 +159,13 @@ UPDATE accounts SET balance = balance + 1000 WHERE = 999;  --无效的ID
 
 ROLLBACK；  --回滚撤销事务
 COMMIT;     --提交事务
+```
 
+## 一些查询语句的技巧
 
+#### 连接查询
+
+下面两个SQL查询等价
+```sql
+SELECT s
 ```
