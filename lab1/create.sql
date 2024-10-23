@@ -79,4 +79,7 @@ CREATE TABLE fine(
     reason      TEXT,
     record_id   INT,
     FOREIGN KEY (record_id) REFERENCES record(record_id)
-)
+);
+
+-- 在record_id上添加唯一约束
+ALTER TABLE fine ADD CONSTRAINT UNIQUE (record_id);
