@@ -9,6 +9,7 @@ conn = pymysql.connect(
     user="root",  # 数据库用户名
     password="751016xkb",  # 数据库密码
     database="library",  # 数据库名称
+    connect_timeout=60,  # 将超时时间设置为60秒
     charset="utf8mb4"  # 使用utf8mb4字符集
 )
 
@@ -471,7 +472,6 @@ if __name__ == '__main__':
                 )
                 gr.Markdown("---")
 
-
             # 第三个页面 - 图书-作者页面
             with gr.Tab("作者-书籍"):
                 gr.Markdown("---")
@@ -483,9 +483,9 @@ if __name__ == '__main__':
 
                 add_book_id = gr.Textbox(label="书籍编号")
                 add_author_id = gr.Textbox(label="作者编号")
-                add_book_author_button = gr.button("增加书籍-作者记录", variant="primary")
-                add_book_author_output = gr.Textbox()
-                add_book_button.click(
+                add_book_author_button = gr.Button("增加书籍-作者记录", variant="primary")
+                add_book_author_output = gr.Textbox(label="结果")
+                add_book_author_button.click(
                     fn=insert_book_author,
                     inputs=[add_book_id, add_author_id],
                     outputs=add_book_author_output
@@ -499,15 +499,248 @@ if __name__ == '__main__':
                     </div>"""
                 )
 
-                del_book_id = gr.Textbox(label="书籍id")
-                del_author_id = gr.Textbox(label="作者id")
+                del_book_id = gr.Textbox(label="书籍编号")
+                del_author_id = gr.Textbox(label="作者编号")
 
-                del_book_author_button = gr.Button("减少书籍", variant='stop')
+                del_book_author_button = gr.Button("减少作者-书籍记录", variant='stop')
                 del_book_author_output = gr.Textbox(label="结果")
-                delete_book_button.click(
+                del_book_author_button.click(
                     fn=delete_book_author,
                     inputs=[del_book_id, del_author_id],
                     outputs=del_book_author_output
+                )
+                gr.Markdown("---")
+
+            # 第四个页面 - 书架页面
+            with gr.Tab("书架"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加书架信息
+                    </div>"""
+                )
+
+                add_bookshelf_id = gr.Textbox(label="书架编号")
+                add_location = gr.Textbox(label="书架位置")
+                add_bookshelf_button = gr.Button("增加书架", variant="primary")
+                add_bookshelf_output = gr.Textbox(label="结果")
+                add_bookshelf_button.click(
+                    fn=insert_bookshelf,
+                    inputs=[add_bookshelf_id, add_location],
+                    outputs=add_bookshelf_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除书架信息
+                    </div>"""
+                )
+
+                del_bookshelf_id = gr.Textbox(label="书架编号")
+                del_bookshelf_button = gr.Button("减少书架", variant='stop')
+                del_bookshelf_output = gr.Textbox(label="结果")
+                del_bookshelf_button.click(
+                    fn=delete_book_shelf,
+                    inputs=[del_bookshelf_id, ],
+                    outputs=del_bookshelf_output
+                )
+                gr.Markdown("---")
+
+            # 第五个页面 - 罚款页面
+            with gr.Tab("处罚记录"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加处罚记录
+                    </div>"""
+                )
+
+                add_fine_id = gr.Textbox(label="处罚记录编号")
+                add_amount = gr.Textbox(label="罚款总额")
+                add_reason = gr.Textbox(label="罚款原因")
+                add_record_id = gr.Textbox(label="所处理的借阅记录编号")
+                add_fine_button = gr.Button("增加处罚记录", variant="primary")
+                add_fine_output = gr.Textbox(label="结果")
+                add_fine_button.click(
+                    fn=insert_fine,
+                    inputs=[add_fine_id, add_amount, add_reason, add_record_id],
+                    outputs=add_fine_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除处罚记录
+                    </div>"""
+                )
+
+                del_fine_id = gr.Textbox(label="处罚记录编号")
+                del_fine_button = gr.Button("删除处罚记录", variant='stop')
+                del_fine_output = gr.Textbox(label="结果")
+                del_fine_button.click(
+                    fn=delete_fine,
+                    inputs=[del_fine_id, ],
+                    outputs=del_fine_output
+                )
+                gr.Markdown("---")
+
+            # 第六个页面 - 图书管理员页面
+            with gr.Tab("图书管理员"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加图书管理员信息
+                    </div>"""
+                )
+
+                add_librarian_id = gr.Textbox(label="图书管理员编号")
+                add_librarian_name = gr.Textbox(label="图书管理员姓名")
+                add_job = gr.Textbox(label="图书管理员职称")
+                add_hire_date = gr.Textbox(label="雇佣日期（格式YYYY-MM-DD）")
+                add_librarian_button = gr.Button("增加图书管理员", variant="primary")
+                add_librarian_output = gr.Textbox(label="结果")
+                add_librarian_button.click(
+                    fn=insert_librarian,
+                    inputs=[add_librarian_id, add_librarian_name, add_job, add_hire_date],
+                    outputs=add_librarian_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除图书管理员信息
+                    </div>"""
+                )
+
+                del_librarian_id = gr.Textbox(label="图书管理员编号")
+                del_librarian_button = gr.Button("删除图书管理员", variant='stop')
+                del_librarian_output = gr.Textbox(label="结果")
+                del_librarian_button.click(
+                    fn=delete_librarian,
+                    inputs=[del_librarian_id, ],
+                    outputs=del_librarian_output
+                )
+                gr.Markdown("---")
+
+            # 第七个页面 - 会员页面
+            with gr.Tab("会员"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加会员信息
+                    </div>"""
+                )
+
+                add_member_id = gr.Textbox(label="会员编号")
+                add_member_name = gr.Textbox(label="会员姓名")
+                add_gender = gr.Textbox(label="会员性别（M或者F）")
+                add_birth = gr.Textbox(label="生日（格式YYYY-MM-DD）")
+                add_reg_date = gr.Textbox(label="注册日期（格式YYYY-MM-DD")
+                add_member_button = gr.Button("增加会员", variant="primary")
+                add_member_output = gr.Textbox(label="结果")
+                add_member_button.click(
+                    fn=insert_member,
+                    inputs=[add_member_id, add_member_name, add_gender, add_birth, add_reg_date],
+                    outputs=add_member_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除会员信息
+                    </div>"""
+                )
+
+                del_member_id = gr.Textbox(label="会员编号")
+                del_member_button = gr.Button("删除会员", variant='stop')
+                del_member_output = gr.Textbox(label="结果")
+                del_member_button.click(
+                    fn=delete_member,
+                    inputs=[del_member_id, ],
+                    outputs=del_member_output
+                )
+                gr.Markdown("---")
+
+            # 第八个页面 - 出版社页面
+            with gr.Tab("出版社"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加出版社信息
+                    </div>"""
+                )
+
+                add_publisher_id = gr.Textbox(label="出版社编号")
+                add_publisher_name = gr.Textbox(label="出版社名")
+                add_adress = gr.Textbox(label="出版社地址")
+                add_publiher_button = gr.Button("增加出版社", variant="primary")
+                add_publiher_output = gr.Textbox(label="结果")
+                add_publiher_button.click(
+                    fn=insert_publisher,
+                    inputs=[add_publisher_id, add_publisher_name, add_adress],
+                    outputs=add_publiher_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除出版社信息
+                    </div>"""
+                )
+
+                del_publisher_id = gr.Textbox(label="出版社编号")
+                del_publisher_button = gr.Button("删除出版社", variant='stop')
+                del_publisher_output = gr.Textbox(label="结果")
+                del_publisher_button.click(
+                    fn=delete_publisher,
+                    inputs=[del_publisher_id, ],
+                    outputs=del_publisher_output
+                )
+                gr.Markdown("---")
+
+            # 第九个页面 - 借阅记录页面
+            with gr.Tab("借阅记录"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加借阅记录信息
+                    </div>"""
+                )
+
+                add_record_id = gr.Textbox(label="借阅记录编号")
+                add_borrow_date = gr.Textbox(label="借阅日期（格式YYYY-MM-DD）")
+                add_member_id = gr.Textbox(label="会员编号")
+                add_book_id = gr.Textbox(label="图书编号")
+                add_librarian_id = gr.Textbox(label="管理员编号")
+                add_record_button = gr.Button("增加借阅记录", variant="primary")
+                add_record_output = gr.Textbox(label="结果")
+                add_record_button.click(
+                    fn=insert_record,
+                    inputs=[add_record_id, add_borrow_date, add_member_id, add_book_id, add_librarian_id],
+                    outputs=add_record_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除借阅记录信息
+                    </div>"""
+                )
+
+                del_record_id = gr.Textbox(label="借阅记录编号")
+                del_record_button = gr.Button("删除借阅记录", variant='stop')
+                del_record_output = gr.Textbox(label="结果")
+                del_record_button.click(
+                    fn=delete_record,
+                    inputs=[del_record_id, ],
+                    outputs=del_record_output
                 )
                 gr.Markdown("---")
 
