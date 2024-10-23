@@ -397,7 +397,7 @@ if __name__ == '__main__':
                 author_name = gr.Textbox(label="作者姓名")
                 nationality = gr.Textbox(label="作者国籍")
 
-                insert_author_button = gr.Button(label="增加作者信息", variant='primary')
+                insert_author_button = gr.Button("增加作者信息", variant='primary')
 
                 insert_author_output = gr.Textbox(label="结果")
 
@@ -419,7 +419,7 @@ if __name__ == '__main__':
 
                 del_author_id = gr.Textbox(label="作者编号")
 
-                del_author_button = gr.Button(label="删除作者", variant='stop')
+                del_author_button = gr.Button("删除作者", variant='stop')
 
                 del_author_output = gr.Textbox(label="删除结果")
 
@@ -468,6 +468,46 @@ if __name__ == '__main__':
                     fn=delete_book,
                     inputs=[book_id],
                     outputs=delete_book_output
+                )
+                gr.Markdown("---")
+
+
+            # 第三个页面 - 图书-作者页面
+            with gr.Tab("作者-书籍"):
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    增加作者-书籍记录
+                    </div>"""
+                )
+
+                add_book_id = gr.Textbox(label="书籍编号")
+                add_author_id = gr.Textbox(label="作者编号")
+                add_book_author_button = gr.button("增加书籍-作者记录", variant="primary")
+                add_book_author_output = gr.Textbox()
+                add_book_button.click(
+                    fn=insert_book_author,
+                    inputs=[add_book_id, add_author_id],
+                    outputs=add_book_author_output
+                )
+                gr.Markdown("---")
+
+                gr.Markdown("---")
+                gr.Markdown(
+                    """<div style='text-align: center; font-size: 24px; font-weight: bold;'>
+                    删除作者-书籍记录
+                    </div>"""
+                )
+
+                del_book_id = gr.Textbox(label="书籍id")
+                del_author_id = gr.Textbox(label="作者id")
+
+                del_book_author_button = gr.Button("减少书籍", variant='stop')
+                del_book_author_output = gr.Textbox(label="结果")
+                delete_book_button.click(
+                    fn=delete_book_author,
+                    inputs=[del_book_id, del_author_id],
+                    outputs=del_book_author_output
                 )
                 gr.Markdown("---")
 
