@@ -20,4 +20,5 @@ END//
 
 DELIMITER ;
 
+-- 删除触发器
 DROP TRIGGER IF EXISTS before_insert_record;
