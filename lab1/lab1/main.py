@@ -373,11 +373,12 @@ def search_member_n_books(book_num):
         return f"查询失败：{e}"
 
 # 分组查询，按照类别对书籍数量进行统计
-def search_books_num_by_category():
-    sql = "SELECT book.category, COUNT(book.book_id) FROM book GROUP BY book.category"
+def search_books_num_by_category(num):
+    sql = "SELECT book.category, COUNT(book.book_id) FROM book GROUP BY book.category HAVING COUNT(book.book_id) >= %s"
+    values = (num,)
 
     try:
-        cursor.execute(sql)
+        cursor.execute(sql,values)
         result = cursor.fetchall()
 
         # 如果查询结果为空，返回提示信息
@@ -836,9 +837,11 @@ if __name__ == '__main__':
                     查询每一类图书的数量
                     </div>"""
                 )
+                search_catogory_input = gr.Textbox(label="至少多少本（默认为0）")
                 search_category_button = gr.Button("查询每一类图书的数量", variant="primary")
                 search_category_output = gr.Textbox(label="结果")
                 search_category_button.click(
+                    inputs = search_catogory_input,
                     fn=search_books_num_by_category,
                     outputs= search_category_output
                 )
